@@ -1,10 +1,7 @@
+use crate::model::task::Task;
 use sqlx::PgPool;
 use std::marker::PhantomData;
 use std::sync::Arc;
-
-use crate::model::task::Task;
-
-pub type Result<T> = anyhow::Result<T, sqlx::Error>;
 
 pub struct Table<T> {
     pub pool: Arc<PgPool>,

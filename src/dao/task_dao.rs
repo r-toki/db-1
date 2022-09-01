@@ -1,10 +1,9 @@
-use super::db::{Result, Table};
+use super::db::Table;
 use crate::model::task::{EditTask, NewTask, Task};
-use sqlx::query_as;
 
 impl Table<Task> {
-    pub async fn find_all(&self) -> Result<Vec<Task>> {
-        query_as!(
+    pub async fn find_all(&self) -> Result<Vec<Task>, sqlx::Error> {
+        sqlx::query_as!(
             Task,
             r#"
 SELECT *
@@ -16,8 +15,8 @@ ORDER BY id
         .await
     }
 
-    pub async fn find_one(&self, id: i64) -> Result<Task> {
-        query_as!(
+    pub async fn find_one(&self, id: i64) -> Result<Task, sqlx::Error> {
+        sqlx::query_as!(
             Task,
             r#"
 SELECT *
@@ -30,8 +29,8 @@ where id = $1
         .await
     }
 
-    pub async fn insert(&self, new_task: NewTask) -> Result<Task> {
-        query_as!(
+    pub async fn insert(&self, new_task: NewTask) -> Result<Task, sqlx::Error> {
+        sqlx::query_as!(
             Task,
             r#"
 INSERT INTO tasks (description)
@@ -44,8 +43,8 @@ RETURNING *
         .await
     }
 
-    pub async fn update(&self, id: i64, edit_task: EditTask) -> Result<Task> {
-        query_as!(
+    pub async fn update(&self, id: i64, edit_task: EditTask) -> Result<Task, sqlx::Error> {
+        sqlx::query_as!(
             Task,
             r#"
 UPDATE tasks
@@ -61,8 +60,8 @@ RETURNING *
         .await
     }
 
-    pub async fn delete(&self, id: i64) -> Result<Task> {
-        query_as!(
+    pub async fn delete(&self, id: i64) -> Result<Task, sqlx::Error> {
+        sqlx::query_as!(
             Task,
             r#"
 DELETE FROM tasks
